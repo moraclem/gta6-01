@@ -302,13 +302,14 @@ export class City {
     crane.add(beam);
     crane.position.set(PLACES.docks.x + 10, 0, PLACES.docks.z + 18);
     scene.add(crane);
-    // Plaza del Sol — fountain.
+    // Plaza del Sol — fountain (and its collision, so cars cannot drive through it).
     const basin = new THREE.Mesh(
       new THREE.CylinderGeometry(10, 10, 1.2, 20),
       new THREE.MeshLambertMaterial({ color: 0xb0c8d8 })
     );
     basin.position.set(0, 0.6, 0);
     scene.add(basin);
+    this.buildings.push({ x: 0, z: 0, hw: 10, hd: 10, h: 2 });
     const water = new THREE.Mesh(
       new THREE.CylinderGeometry(9, 9, 0.4, 20),
       new THREE.MeshLambertMaterial({ color: 0x2a90c8 })

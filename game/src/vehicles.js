@@ -308,12 +308,13 @@ export class Traffic {
       }
       if (d > 500) this.removePoliceCar(car);
     }
-    // Helicopter at 3+ stars: circles the player with a searchlight.
+    // Helicopter at 3+ stars: circles the player wide and low enough to be
+    // seen in the sky, with a searchlight.
     const heliOn = wanted >= 3;
     this.heli.visible = heliOn;
     if (heliOn) {
       const t = this.G.time * 0.5;
-      this.heli.position.set(p.x + Math.cos(t) * 26, 42, p.z + Math.sin(t) * 26);
+      this.heli.position.set(p.x + Math.cos(t) * 55, 26, p.z + Math.sin(t) * 55);
       this.heli.lookAt(p.x, 0, p.z);
       this.heliRotor.rotation.y += dt * 22;
       this.heliLight.intensity = 900;

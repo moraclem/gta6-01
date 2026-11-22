@@ -32,6 +32,7 @@ class Game {
     this.deathTimer = 0;
     this.shotMode = new URLSearchParams(location.search).get('shot') || null;
     this.shotReady = false;
+    this.shotCam = null; // fixed camera for staged screenshots
   }
 
   boot() {
@@ -290,6 +291,12 @@ class Game {
   updateCamera(dt) {
     const p = this.player;
     const cam = this.camera;
+    // Staged screenshots use a fixed, framed camera.
+    if (this.shotCam) {
+      cam.position.copy(this.shotCam.pos);
+      cam.lookAt(this.shotCam.look);
+      return;
+    }
     let target;
     let yaw;
     let dist;
@@ -322,7 +329,7 @@ class Game {
     this.hud.hideScreens();
     const p = this.player;
     if (mode === 'cover') {
-      // Chase down the avenue: Daz in a red Veloce, 3 stars, police behind.
+      // Chase down the avenue: Daz in a red Veloce, 3 stars, police ahead.
       const car = this.traffic.spawnParkedCar();
       car.x = 0; car.z = -40; car.heading = 0;
       car.mesh.children[0].material = car.mesh.children[0].material.clone();
@@ -334,16 +341,24 @@ class Game {
       p.enterCar(car);
       car.speed = 30;
       this.setWanted(3, 'shot');
+      // Stage the pursuit: two interceptors coming down the avenue at Daz,
+      // one more closing in from behind, so the chase reads in one frame.
+      const cop1 = this.traffic.spawnPoliceCar(0, -40);
+      cop1.x = -5; cop1.z = 8; cop1.heading = Math.PI; cop1.speed = 26; cop1.updateMesh();
+      const cop2 = this.traffic.spawnPoliceCar(0, -40);
+      cop2.x = 6; cop2.z = 30; cop2.heading = Math.PI; cop2.speed = 26; cop2.updateMesh();
+      const cop3 = this.traffic.spawnPoliceCar(0, -40);
+      cop3.x = 4; cop3.z = -78; cop3.heading = 0; cop3.speed = 30; cop3.updateMesh();
       this.missions.startMission(this.missions.nextMission);
       this.hud.setObjective('Escape the Alba PD — lose 3 stars');
       p.camYaw = Math.PI;
     } else if (mode === 'drive') {
-      // Sunset cruise along the beach road.
+      // Sunset cruise along the beach road (the z=320 road, heading east).
       const car = this.traffic.spawnParkedCar();
-      car.x = 120; car.z = 300; car.heading = Math.PI / 2;
+      car.x = 120; car.z = 320; car.heading = Math.PI / 2;
       car.updateMesh();
       car.free = true;
-      p.reset(120, 300);
+      p.reset(120, 320);
       p.enterCar(car);
       car.speed = 32;
       this.city.sun.position.set(-220, 90, 260);
@@ -353,26 +368,36 @@ class Game {
       this.hud.setObjective('Cruise Palma Verde Beach — explore Costa Alba');
       p.camYaw = Math.PI;
     } else if (mode === 'foot') {
-      // Shootout at the docks: Daz on foot, rivals ahead.
-      p.reset(PLACES.docks.x - 24, PLACES.docks.z - 6);
-      p.camYaw = Math.PI / 2 + 0.4;
+      // Shootout at the docks: Daz on foot in the open yard, rivals ahead.
+      // Fixed elevated camera so the containers never block the frame.
+      p.reset(250, 228);
+      p.camYaw = -Math.PI / 2;
       p.heading = Math.PI / 2;
       for (let i = 0; i < 4; i++) {
-        this.peds.spawnEnemy(PLACES.docks.x + 6 + i * 5, PLACES.docks.z + (i % 2) * 8 - 4);
+        this.peds.spawnEnemy(276 + i * 6, 222 + (i % 2) * 10);
       }
       this.setWanted(2, 'shot');
+      this.shotCam = {
+        pos: new THREE.Vector3(232, 13, 206),
+        look: new THREE.Vector3(282, 1, 228),
+      };
       this.hud.setObjective('Turbulence — eliminate the rivals at Coral Docks (2/6)');
       this.hud.message('Rival crew at the docks — take them out!', 'crime');
     } else if (mode === 'mission') {
       // The Vault: Daz outside Alba National Bank, guards and beacon.
-      p.reset(PLACES.bank.x - 4, PLACES.bank.z + 30);
+      // Fixed elevated camera looking over the bank's forecourt.
+      p.reset(40, 62);
       p.camYaw = Math.PI;
-      p.heading = 0;
+      p.heading = Math.PI;
       for (let i = 0; i < 3; i++) {
-        this.peds.spawnEnemy(PLACES.bank.x - 10 + i * 10, PLACES.bank.z + 16);
+        this.peds.spawnEnemy(30 + i * 10, 50);
       }
       this.city.setBeacon(PLACES.bank.x, PLACES.bank.z, true);
       this.setWanted(1, 'shot');
+      this.shotCam = {
+        pos: new THREE.Vector3(14, 15, 92),
+        look: new THREE.Vector3(40, 2, 46),
+      };
       this.hud.setObjective('The Vault — take out the 4 bank guards (0/4)');
       this.hud.message('Mission 8: The Vault — Alba National Bank', 'good');
     }
