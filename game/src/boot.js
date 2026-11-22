@@ -437,10 +437,14 @@ function stageScene(kind) {
     hooks.setWanted(3);
     story.startMission(6); // Beach Party Bust — beacon on the beach road
     story.stepIdx = 1; story.enterStep(); // courier car already out ahead
+    story.targetCar.group.position.set(110, 0, 300); // keep it ahead of the player
     const p1 = crowd.spawnPoliceCar();
-    p1.group.position.set(-40, 0, 300); p1.heading = Math.PI / 2;
+    p1.group.position.set(-70, 0, 300); p1.heading = Math.PI / 2;
     const p2 = crowd.spawnPoliceCar();
     p2.group.position.set(150, 0, 300); p2.heading = -Math.PI / 2; // roadblock ahead
+    // helicopter already on station above the chase, not still flying in
+    crowd.spawnHelicopter();
+    crowd.heli.group.position.set(30, 18, 274);
   } else if (kind === 'foot') {
     state.x = -24; state.z = 252; state.heading = Math.PI;
     state.camYaw = 0.15; state.camPitch = 0.32;
