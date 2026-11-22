@@ -195,8 +195,9 @@ export class Crowd {
     if (this.wanted < 3 && this.heli) this.removeHelicopter();
     if (this.heli) {
       const h = this.heli.group;
-      h.position.x = angleLerp(h.position.x, player.x + 30, dt * 0.5);
-      h.position.z = angleLerp(h.position.z, player.z - 26, dt * 0.5);
+      const k = Math.min(1, dt * 0.5);
+      h.position.x += (player.x + 30 - h.position.x) * k;
+      h.position.z += (player.z - 26 - h.position.z) * k;
       h.position.y = 18 + Math.sin(performance.now() / 900) * 1.5;
       h.rotation.y = Math.atan2(player.x - h.position.x, player.z - h.position.z);
       this.heli.rotor.rotation.y += dt * 22;
