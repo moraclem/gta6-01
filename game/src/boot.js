@@ -418,29 +418,39 @@ function stageScene(kind) {
   if (kind === 'cover') {
     state.cash = 12500;
     putInCar(0, 96, 0, 0xc23b2e);
-    state.car.speed = 6;
+    state.car.speed = 10;
     hooks.setWanted(2);
     story.startMission(5); // Grand Theft Alba — beacon on the bank
-    fleet.spawnTraffic(3);
+    // two interceptors right behind the player, one more joins from the grid
+    const p1 = crowd.spawnPoliceCar();
+    p1.group.position.set(-2.5, 0, 62); p1.heading = 0;
+    const p2 = crowd.spawnPoliceCar();
+    p2.group.position.set(3, 0, 70); p2.heading = 0;
+    const t1 = fleet.makeCar(2, 150, 0, 0x2e6fc2, 'traffic');
+    t1.axis = 'z'; t1.dir = 1; t1.road = 0; t1.targetSpeed = 11;
+    const t2 = fleet.makeCar(-2, 215, Math.PI, 0xe8b73c, 'traffic');
+    t2.axis = 'z'; t2.dir = -1; t2.road = 0; t2.targetSpeed = 11;
   } else if (kind === 'chase') {
     state.cash = 8300;
-    putInCar(60, 352, Math.PI / 2, 0x2e6fc2);
+    putInCar(0, 352, Math.PI / 2, 0x2e6fc2);
     state.car.speed = 24;
     hooks.setWanted(3);
     story.startMission(6); // Beach Party Bust — beacon on the beach road
+    story.stepIdx = 1; story.enterStep(); // courier car already out ahead
+    const p1 = crowd.spawnPoliceCar();
+    p1.group.position.set(-34, 0, 348); p1.heading = Math.PI / 2;
+    const p2 = crowd.spawnPoliceCar();
+    p2.group.position.set(-46, 0, 356); p2.heading = Math.PI / 2;
   } else if (kind === 'foot') {
-    state.x = 30; state.z = 132; state.heading = Math.PI;
-    state.camYaw = Math.PI; state.camPitch = 0.3;
+    state.x = -30; state.z = 252; state.heading = Math.PI;
+    state.camYaw = 0; state.camPitch = 0.32;
     player.group.position.set(state.x, 0, state.z);
     hooks.setWanted(1);
     story.startMission(2); // Debt Collector — goons at the mercado
     story.stepIdx = 1; story.enterStep();
-    state.x = -30; state.z = 188; state.heading = 0.4;
-    state.camYaw = 0.4 + Math.PI; state.camPitch = 0.28;
-    player.group.position.set(state.x, 0, state.z);
   } else if (kind === 'mission') {
-    state.x = 356; state.z = 138; state.heading = -0.6;
-    state.camYaw = -0.6 + Math.PI; state.camPitch = 0.3;
+    state.x = 330; state.z = 150; state.heading = Math.PI / 2;
+    state.camYaw = -Math.PI / 2; state.camPitch = 0.32;
     player.group.position.set(state.x, 0, state.z);
     hooks.setWanted(2);
     story.startMission(4); // Turbulence — dock shootout

@@ -68,7 +68,7 @@ export function buildWorld(scene) {
   sun.shadow.camera.top = 220; sun.shadow.camera.bottom = -220;
   sun.shadow.camera.far = 800;
   scene.add(sun); scene.add(sun.target);
-  scene.add(new THREE.HemisphereLight(0xbfd9ef, 0x8a7a5a, 1.1));
+  scene.add(new THREE.HemisphereLight(0xbfd9ef, 0x8a7a5a, 1.35));
 
   // ---- ground: one big painted canvas (roads, sidewalks, sand, runway) -----
   const groundTex = canvasTexture(2048, 2048, (g, w, h) => {
@@ -156,11 +156,15 @@ export function buildWorld(scene) {
   // ---- buildings -----------------------------------------------------------
   const facadeMats = PALETTE.building.slice(0, 6).map((c) =>
     new THREE.MeshLambertMaterial({ map: facadeTexture(c, 0.45, mulberry32(100 + PALETTE.building.indexOf(c))) }));
+  // plain sides so the window texture never stretches around a corner
+  const sideMats = PALETTE.building.slice(0, 6).map((c) =>
+    new THREE.MeshLambertMaterial({ color: new THREE.Color(c).multiplyScalar(0.92) }));
   const roofMat = new THREE.MeshLambertMaterial({ color: 0x6a6f75 });
   const boxGeo = new THREE.BoxGeometry(1, 1, 1);
   const buildings = [];
   function addBuilding(cx, cz, w, d, hgt, matIdx, collider = true) {
-    const m = new THREE.Mesh(boxGeo, facadeMats[matIdx % facadeMats.length]);
+    const m = new THREE.Mesh(boxGeo, [sideMats[matIdx % sideMats.length], sideMats[matIdx % sideMats.length],
+      roofMat, roofMat, facadeMats[matIdx % facadeMats.length], facadeMats[matIdx % facadeMats.length]]);
     m.scale.set(w, hgt, d);
     m.position.set(cx, hgt / 2, cz);
     m.castShadow = true; m.receiveShadow = true;
