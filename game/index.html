@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Costa Alba — an open-world crime story</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #101820;
+    font-family: Arial, Helvetica, sans-serif; color: #fff; }
+  #game, #game canvas { width: 100%; height: 100%; display: block; }
+  #ui { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+  .hidden { display: none !important; }
+  /* ---- HUD ---- */
+  #hud-top-left { position: absolute; top: 14px; left: 16px; }
+  #objective { background: rgba(10,16,20,.72); border-left: 4px solid #ffd76a;
+    padding: 8px 12px; font-size: 15px; font-weight: bold; max-width: 420px;
+    border-radius: 0 6px 6px 0; text-shadow: 0 1px 2px #000; }
+  #health-wrap { margin-top: 8px; width: 220px; height: 18px; background: rgba(0,0,0,.55);
+    border: 1px solid rgba(255,255,255,.4); border-radius: 9px; position: relative; overflow: hidden; }
+  #health-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #e84a3c, #ff7a5c);
+    transition: width .2s; }
+  #health-num { position: absolute; right: 6px; top: 0; line-height: 18px; font-size: 12px; font-weight: bold; }
+  #ammo { margin-top: 6px; font-size: 13px; font-weight: bold; text-shadow: 0 1px 2px #000; }
+  #hud-top-right { position: absolute; top: 14px; right: 16px; text-align: right; }
+  #stars { font-size: 26px; letter-spacing: 2px; text-shadow: 0 2px 3px #000; }
+  #stars span { color: rgba(255,255,255,.25); }
+  #stars span.on { color: #ffd76a; }
+  #cash { font-size: 26px; font-weight: bold; color: #7ed67e; text-shadow: 0 2px 3px #000; }
+  #clock, #station { font-size: 14px; font-weight: bold; text-shadow: 0 1px 2px #000; }
+  #speedo { position: absolute; right: 22px; bottom: 24px; font-size: 44px; font-weight: bold;
+    text-shadow: 0 2px 4px #000; }
+  #speedo small { font-size: 15px; margin-left: 4px; }
+  #crosshair { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    font-size: 30px; font-weight: bold; color: rgba(255,255,255,.9); text-shadow: 0 0 4px #000; }
+  #minimap-wrap { position: absolute; left: 16px; bottom: 16px; }
+  #feed { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
+    text-align: center; font-size: 15px; font-weight: bold; text-shadow: 0 1px 3px #000;
+    max-width: 640px; }
+  #feed div { background: rgba(10,16,20,.6); border-radius: 4px; padding: 3px 10px; margin-top: 3px; }
+  #hint { position: absolute; right: 16px; bottom: 4px; font-size: 11px; color: rgba(255,255,255,.65);
+    text-shadow: 0 1px 2px #000; }
+  /* ---- overlays ---- */
+  .overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, rgba(20,40,60,.82), rgba(60,20,10,.78));
+    pointer-events: auto; }
+  .panel { text-align: center; max-width: 560px; padding: 28px; }
+  .panel h1 { font-size: 84px; line-height: .9; letter-spacing: 4px; color: #ffd76a;
+    text-shadow: 0 4px 0 #c23b2e, 0 8px 24px rgba(0,0,0,.6); }
+  .panel h2 { font-size: 52px; letter-spacing: 3px; color: #ffd76a; text-shadow: 0 3px 12px #000; }
+  .panel h2.red { color: #ff5a4a; }
+  .panel h2.gold { color: #ffd76a; }
+  .tag { margin: 16px 0 22px; font-size: 16px; line-height: 1.5; color: #ffe9c8; }
+  .controls { margin-top: 22px; font-size: 13px; line-height: 1.7; color: rgba(255,255,255,.85);
+    background: rgba(0,0,0,.35); border-radius: 8px; padding: 12px 16px; }
+  .controls b { display: block; color: #ffd76a; margin-bottom: 4px; letter-spacing: 2px; }
+  button { display: block; width: 280px; margin: 10px auto; padding: 13px; font-size: 17px;
+    font-weight: bold; letter-spacing: 2px; color: #1a1a1a; background: #ffd76a;
+    border: none; border-radius: 6px; cursor: pointer; pointer-events: auto; }
+  button:hover { background: #ffe9a8; }
+  button:active { transform: translateY(1px); }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<div id="game"></div>
+<div id="ui"></div>
+<script type="module" src="./src/boot.js"></script>
+</body>
+</html>
