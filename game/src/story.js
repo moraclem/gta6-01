@@ -36,7 +36,7 @@ export const MISSIONS = [
     steps: [
       { kind: 'goto', x: 372, z: 150, r: 16, text: 'Get to Coral Docks' },
       { kind: 'eliminate', text: 'Clear the dock crew (6)',
-        spawn: [[340, 100, {}], [340, 150, {}], [340, 190, {}], [390, 100, {}], [390, 180, {}], [370, 210, {}]] },
+        spawn: [[345, 135, {}], [352, 155, {}], [368, 140, {}], [345, 170, {}], [378, 165, {}], [360, 120, {}]] },
     ] },
   { id: 6, title: 'Grand Theft Alba', reward: 3000,
     brief: 'Vince: "An armored van leaves Alba National Bank at noon. Take it. The whole city will be looking for you."',
@@ -47,7 +47,7 @@ export const MISSIONS = [
   { id: 7, title: 'Beach Party Bust', reward: 2500,
     brief: 'Mara: "Kroll\'s courier is showing off on the beach road. Ram his ride until it stops. Don\'t be gentle."',
     steps: [
-      { kind: 'goto', x: 180, z: 350, r: 12, text: 'Get to the beach road' },
+      { kind: 'goto', x: 180, z: 300, r: 12, text: 'Get to the beach road' },
       { kind: 'ram', text: 'Ram the courier\'s car until it\'s wrecked' },
     ] },
   { id: 8, title: 'The Vault', reward: 5000,
@@ -147,7 +147,7 @@ export class Story {
       }
     }
     if (s.kind === 'ram') {
-      this.targetCar = this.fleet.makeCar(60, 352, Math.PI / 2, 0xb83a6e, 'target', "Courier's Coupe");
+      this.targetCar = this.fleet.makeCar(60, 300, Math.PI / 2, 0xb83a6e, 'target', "Courier's Coupe");
       this.targetDir = 1;
     }
     if (s.wanted) this.hooks.setWanted(s.wanted);
@@ -215,7 +215,7 @@ export class Story {
       const wantHeading = this.targetDir > 0 ? Math.PI / 2 : -Math.PI / 2;
       const steer = clamp((wantHeading - t.heading + Math.PI * 3) % (Math.PI * 2) - Math.PI, -0.6, 0.6);
       this.fleet.drive(t, dt, 0.8, steer * 0.5);
-      t.group.position.z += (352 - t.group.position.z) * dt * 0.5;
+      t.group.position.z += (300 - t.group.position.z) * dt * 0.5;
     }
     const s = this.step;
     if (!s || !this.current) return;

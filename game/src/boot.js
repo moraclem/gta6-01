@@ -432,25 +432,25 @@ function stageScene(kind) {
     t2.axis = 'z'; t2.dir = -1; t2.road = 0; t2.targetSpeed = 11;
   } else if (kind === 'chase') {
     state.cash = 8300;
-    putInCar(0, 352, Math.PI / 2, 0x2e6fc2);
+    putInCar(0, 300, Math.PI / 2, 0x2e6fc2);
     state.car.speed = 24;
     hooks.setWanted(3);
     story.startMission(6); // Beach Party Bust — beacon on the beach road
     story.stepIdx = 1; story.enterStep(); // courier car already out ahead
     const p1 = crowd.spawnPoliceCar();
-    p1.group.position.set(-34, 0, 348); p1.heading = Math.PI / 2;
+    p1.group.position.set(-40, 0, 300); p1.heading = Math.PI / 2;
     const p2 = crowd.spawnPoliceCar();
-    p2.group.position.set(-46, 0, 356); p2.heading = Math.PI / 2;
+    p2.group.position.set(150, 0, 300); p2.heading = -Math.PI / 2; // roadblock ahead
   } else if (kind === 'foot') {
-    state.x = -30; state.z = 252; state.heading = Math.PI;
-    state.camYaw = 0; state.camPitch = 0.32;
+    state.x = -24; state.z = 252; state.heading = Math.PI;
+    state.camYaw = 0.15; state.camPitch = 0.32;
     player.group.position.set(state.x, 0, state.z);
     hooks.setWanted(1);
     story.startMission(2); // Debt Collector — goons at the mercado
     story.stepIdx = 1; story.enterStep();
   } else if (kind === 'mission') {
-    state.x = 330; state.z = 150; state.heading = Math.PI / 2;
-    state.camYaw = -Math.PI / 2; state.camPitch = 0.32;
+    state.x = 318; state.z = 150; state.heading = Math.PI / 2;
+    state.camYaw = -Math.PI / 2; state.camPitch = 0.4;
     player.group.position.set(state.x, 0, state.z);
     hooks.setWanted(2);
     story.startMission(4); // Turbulence — dock shootout

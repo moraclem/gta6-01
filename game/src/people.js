@@ -123,7 +123,7 @@ export class Crowd {
     const spot = new THREE.SpotLight(0xfff2b0, 900, 90, 0.28, 0.4, 1.2);
     spot.position.set(0, -1, 0); g.add(spot); g.add(spot.target);
     spot.target.position.set(0, -34, 0);
-    g.position.set(0, 22, 0);
+    g.position.set(0, 18, 0);
     this.scene.add(g);
     this.heli = { group: g, rotor, rotor2, spot };
     return this.heli;
@@ -195,9 +195,9 @@ export class Crowd {
     if (this.wanted < 3 && this.heli) this.removeHelicopter();
     if (this.heli) {
       const h = this.heli.group;
-      h.position.x = angleLerp(h.position.x, player.x + 26, dt * 0.5);
-      h.position.z = angleLerp(h.position.z, player.z - 18, dt * 0.5);
-      h.position.y = 22 + Math.sin(performance.now() / 900) * 1.5;
+      h.position.x = angleLerp(h.position.x, player.x + 30, dt * 0.5);
+      h.position.z = angleLerp(h.position.z, player.z - 26, dt * 0.5);
+      h.position.y = 18 + Math.sin(performance.now() / 900) * 1.5;
       h.rotation.y = Math.atan2(player.x - h.position.x, player.z - h.position.z);
       this.heli.rotor.rotation.y += dt * 22;
       this.heli.rotor2.rotation.y += dt * 22;
