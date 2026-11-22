@@ -467,7 +467,7 @@ function stageScene(kind) {
 
 // ---- debug handle for play-testing -------------------------------------------
 window.__costa = {
-  state, story, fleet, crowd, combat, MISSIONS,
+  state, story, fleet, crowd, combat, bus, MISSIONS,
   startGame, teleport(x, z) {
     state.x = x; state.z = z;
     if (!state.inCar) player.group.position.set(x, 0, z);
