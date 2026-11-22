@@ -64,7 +64,7 @@ export class City {
     const sun = new THREE.DirectionalLight(PALETTE.sun, 2.2);
     sun.position.set(180, 260, 120);
     sun.castShadow = true;
-    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.mapSize.set(1024, 1024);
     sun.shadow.camera.left = -380;
     sun.shadow.camera.right = 380;
     sun.shadow.camera.top = 380;
@@ -339,9 +339,9 @@ export class City {
 
   buildBeacon() {
     // Vertical light pillar marking the current mission objective.
-    const geo = new THREE.CylinderGeometry(2.2, 2.2, 120, 12, 1, true);
+    const geo = new THREE.CylinderGeometry(3, 3, 120, 12, 1, true);
     const mat = new THREE.MeshBasicMaterial({
-      color: 0xffd040, transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false,
+      color: 0xffd040, transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false,
     });
     this.beacon = new THREE.Mesh(geo, mat);
     this.beacon.position.set(0, 60, 0);
@@ -396,7 +396,7 @@ export class City {
     // Gentle ocean swell and beacon pulse.
     if (this.ocean) this.ocean.position.y = -0.4 + Math.sin(time * 0.7) * 0.15;
     if (this.beacon && this.beacon.visible) {
-      this.beacon.material.opacity = 0.28 + Math.sin(time * 3) * 0.1;
+      this.beacon.material.opacity = 0.45 + Math.sin(time * 3) * 0.08;
       this.beacon.rotation.y += dt * 0.6;
     }
   }

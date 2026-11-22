@@ -68,8 +68,10 @@ export class HUD {
     this.el('mission-giver').textContent = mission.giver;
     this.el('mission-brief').textContent = mission.brief;
     this.el('mission-reward').textContent = 'Reward: ' + fmtCash(mission.reward);
+    // In staged screenshot runs the card must survive slow rendering.
+    const hideAfter = this.G.shotMode ? 30000 : 6000;
     card.style.display = 'block';
-    setTimeout(() => { card.style.display = 'none'; }, 6000);
+    setTimeout(() => { card.style.display = 'none'; }, hideAfter);
     this.message(`Mission ${mission.id}: ${mission.title}`, 'good');
   }
 

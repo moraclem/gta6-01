@@ -38,10 +38,10 @@ class Game {
   boot() {
     const canvas = document.getElementById('game-canvas');
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.05;
 
@@ -110,7 +110,9 @@ class Game {
     this.missions.completed.clear();
     this.missions.active = null;
     this.peds.clearEnemies();
-    this.player.reset(PLACES.marasGarage.x, PLACES.marasGarage.z - 24);
+    // Start on the avenue south of the garage, facing it — never inside a block.
+    this.player.reset(PLACES.marasGarage.x, -80);
+    this.player.camYaw = 0;
     this.player.ammo = 60;
     this.city.setBeacon(0, 0, false);
     this.startPlaying();
@@ -155,7 +157,9 @@ class Game {
     // Wake up at St. Coral Hospital, lighter in the pocket.
     this.state.cash = Math.max(0, Math.floor(this.state.cash * 0.9));
     this.setWanted(0, 'respawn');
-    this.player.reset(PLACES.hospital.x, PLACES.hospital.z - 20);
+    // Wake up on the avenue by the hospital, facing north into the city.
+    this.player.reset(PLACES.hospital.x, -80);
+    this.player.camYaw = 0;
     this.player.health = CFG.maxHealth;
     this.startPlaying();
     this.hud.setObjective(this.missions.nextMission ? 'Press M to retry the mission' : 'All missions complete — Costa Alba is yours!');
@@ -177,7 +181,7 @@ class Game {
   // --- wanted system -------------------------------------------------------
   starsForHeat(heat) {
     if (heat <= 0) return 0;
-    return Math.min(CFG.maxWanted, Math.floor(heat / 20) + 1);
+    return Math.min(CFG.maxWanted, Math.ceil(heat / 20));
   }
 
   setWanted(stars, reason) {
@@ -344,9 +348,9 @@ class Game {
       // Stage the pursuit: two interceptors coming down the avenue at Daz,
       // one more closing in from behind, so the chase reads in one frame.
       const cop1 = this.traffic.spawnPoliceCar(0, -40);
-      cop1.x = -5; cop1.z = 8; cop1.heading = Math.PI; cop1.speed = 26; cop1.updateMesh();
+      cop1.x = -5; cop1.z = -22; cop1.heading = Math.PI; cop1.speed = 26; cop1.updateMesh();
       const cop2 = this.traffic.spawnPoliceCar(0, -40);
-      cop2.x = 6; cop2.z = 30; cop2.heading = Math.PI; cop2.speed = 26; cop2.updateMesh();
+      cop2.x = 6; cop2.z = -6; cop2.heading = Math.PI; cop2.speed = 26; cop2.updateMesh();
       const cop3 = this.traffic.spawnPoliceCar(0, -40);
       cop3.x = 4; cop3.z = -78; cop3.heading = 0; cop3.speed = 30; cop3.updateMesh();
       this.missions.startMission(this.missions.nextMission);
@@ -390,13 +394,13 @@ class Game {
       p.camYaw = Math.PI;
       p.heading = Math.PI;
       for (let i = 0; i < 3; i++) {
-        this.peds.spawnEnemy(30 + i * 10, 50);
+        this.peds.spawnEnemy(30 + i * 10, 58);
       }
       this.city.setBeacon(PLACES.bank.x, PLACES.bank.z, true);
       this.setWanted(1, 'shot');
       this.shotCam = {
-        pos: new THREE.Vector3(14, 15, 92),
-        look: new THREE.Vector3(40, 2, 46),
+        pos: new THREE.Vector3(28, 10, 86),
+        look: new THREE.Vector3(40, 1.5, 50),
       };
       this.hud.setObjective('The Vault — take out the 4 bank guards (0/4)');
       this.hud.message('Mission 8: The Vault — Alba National Bank', 'good');
