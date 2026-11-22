@@ -419,6 +419,7 @@ function stageScene(kind) {
     state.cash = 12500;
     putInCar(0, 96, 0, 0xc23b2e);
     state.car.speed = 10;
+    state.camYaw = Math.PI; state.camPitch = 0.32; // camera already behind the car
     hooks.setWanted(2);
     story.startMission(5); // Grand Theft Alba — beacon on the bank
     // two interceptors right behind the player, one more joins from the grid
@@ -434,6 +435,7 @@ function stageScene(kind) {
     state.cash = 8300;
     putInCar(0, 300, Math.PI / 2, 0x2e6fc2);
     state.car.speed = 24;
+    state.camYaw = Math.PI * 1.5; state.camPitch = 0.32; // camera already behind the car
     hooks.setWanted(3);
     story.startMission(6); // Beach Party Bust — beacon on the beach road
     story.stepIdx = 1; story.enterStep(); // courier car already out ahead
